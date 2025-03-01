@@ -1,5 +1,4 @@
 package com.example.demo.service;
 
 public class UsersServiceImpl implements UsersService {
-
 }
