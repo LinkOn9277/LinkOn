@@ -13,8 +13,7 @@ import lombok.*;
 @AllArgsConstructor
 @Table(name = "users")
 public class Users extends BaseTimeEntity {
-    // 회원의 대한 테이블 설계 후
-    // Repository extends JpaRepository<E , T>
+
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
