@@ -26,6 +26,15 @@ public class organize {
 
     // =====================================================================================
 
+    // long count(Predicate) : 조건에 맞는 데이터의 총 개수 반환
+    // boolean exists(Predicate) : 조건에 맞는 데이터 존재 여부 반환
+    // Iterable findAll(Predicate) : 조건에 맞는 모든 데이터 반환
+    // Page<T> finAll(Predicate, Pageable) : 조건에 맞는 페이지 데이터 반환
+    // Iterable findAll(Predicate, Sort) : 조건에 맞는 데이터 반환
+    // T findOne(Predicate) : 조건에 맞는 데이터 1개 반환
+
+    // =====================================================================================
+
     // ※ Entity Manager
     // ● 영속성 컨텍스트에 접근하여 Entity 대한 DB 작업을 제공
     // ● 내부적으로 DB 커넥션을 사용해서 DB 접근
