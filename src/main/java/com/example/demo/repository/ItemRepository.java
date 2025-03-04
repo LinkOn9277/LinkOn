@@ -2,6 +2,7 @@ package com.example.demo.repository;
 
 import com.example.demo.entity.Item;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 
@@ -18,4 +19,8 @@ public interface ItemRepository extends JpaRepository<Item, Long> {
     public List<Item> findByInameOrItemDetail(String iname, String detail); // 상품명과 상세설명으로 찾기
 
     public List<Item> findByCreateBy(String email); // 판매하는 상품 목록보기
+
+    @Query("select i from Item i where i.iname like '%' || :keyword || '%' or i.itemDetail like concat('%' , :keyword , '%') ")
+    public List<Item> selectInDetail(String keyword);
+
 }

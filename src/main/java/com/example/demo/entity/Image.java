@@ -23,6 +23,8 @@ public class Image {
 
     private String iurl;
 
+    private String repimgYn;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "item_id")
     private Item item;
