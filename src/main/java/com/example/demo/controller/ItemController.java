@@ -7,11 +7,14 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.Mapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+
+import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
@@ -21,22 +24,74 @@ public class ItemController {
 
     private final ItemService itemService;
 
-    @GetMapping("/register")
+    @GetMapping("/register") // 등록 GET
     public String register(ItemDTO itemDTO) {
-
+        log.info("상품 등록 GET 진입");
         return "item/register";
     }
 
-    @PostMapping("/register")
+    @PostMapping("/register") // 등록 POST
     public String registerPost(@Valid ItemDTO itemDTO, BindingResult bindingResult) {
-        log.info("상품 등록 POST 페이지 진입");
+        log.info("상품 등록 POST 진입");
 
-        if (bindingResult.hasErrors()) {
-            return "item/register";
-        }
+        if (bindingResult.hasErrors()) { return "item/register"; }
 
+        itemDTO = itemService.register(itemDTO);
+        log.info("저장된 데이터 : " + itemDTO);
 
+        log.info("상품 등록 POST 종료");
         return "item/register";
     }
+
+    @GetMapping("/list") // 목록 GET
+    public String list(Model model){
+        log.info("상품 리스트 진입");
+
+        List<ItemDTO> itemDTOList = itemService.itemList();
+
+        return "item/list";
+    }
+
+    @GetMapping("/read") // 읽기 GET
+    public String read(Long id){
+        log.info("상품 정보 GET 진입");
+
+        if (id == null){ return "redirect:/item/list"; }
+
+        ItemDTO itemDTO = itemService.read(id);
+
+        return "redirect:/item/list";
+    }
+
+    @GetMapping("/modify") // 수정 GET
+    public String modify(Long id){
+        log.info("상품 수정 GET 진입");
+
+        if (id == null){ return "redirect:/item/list"; }
+
+        ItemDTO itemDTO = itemService.read(id);
+
+        return "item/modify";
+    }
+
+    @PostMapping("/modify") // 수정 POST
+    public String modifyPost(ItemDTO itemDTO){
+        log.info("상품 수정 Post 진입");
+
+        itemDTO = itemService.update(itemDTO);
+
+        return null;
+    }
+
+    @PostMapping("/del")
+    public String delPost(ItemDTO itemDTO){
+        log.info("상품 삭제 Post 진입");
+
+        itemService.del(itemDTO.getId());
+
+        return "redirect:/item/list";
+    }
+
+
 
 }

@@ -69,11 +69,11 @@ public class ItemServiceImpl implements ItemService {
 
         Item item = itemRepository.findById(itemDTO.getId()).orElseThrow(EntityNotFoundException::new);
 
-        item.setPrice(itemDTO.getPrice());
-        item.setIname(itemDTO.getIname());
-        item.setItemDetail(itemDTO.getItemDetail());
-        item.setItemSellStatus(itemDTO.getItemSellStatus());
-        item.setStockNumber(itemDTO.getStockNumber());
+        item.setPrice(itemDTO.getPrice());                      // 가격
+        item.setIname(itemDTO.getIname());                      // 상품명
+        item.setItemDetail(itemDTO.getItemDetail());            // 상세설명
+        item.setItemSellStatus(itemDTO.getItemSellStatus());    // 판매여부
+        item.setStockNumber(itemDTO.getStockNumber());          // 수량
 
         return itemDTO;
     }

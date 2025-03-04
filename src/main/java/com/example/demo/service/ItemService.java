@@ -10,11 +10,11 @@ public interface ItemService {
 
     public List<ItemDTO> itemList(); // 목록
 
-    public ItemDTO read(Long id);
+    public ItemDTO read(Long id); // 읽기
 
-    public ItemDTO update(ItemDTO itemDTO);
+    public ItemDTO update(ItemDTO itemDTO); // 수정
 
-    public Long del(Long id);
+    public Long del(Long id); // 삭제
 
 
 }

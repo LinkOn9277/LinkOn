@@ -1,10 +1,43 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout1}"
+>
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
 </head>
 <body>
+<th:block layout:fragment="content">
 
+    <form action="/item/register" method="post" th:object="${itemDTO}">
+        <div>
+            <select th:field="*{itemSellStatus}">
+                <option value="SELL">판매중</option>
+                <option value="SOLE_OUT">품절</option>
+            </select>
+        </div>
+        <div>
+            상품명 : <input name="iname" th:field="*{iname}">
+        </div>
+        <div>
+            가격 : <input name="price" th:field="*{price}">
+        </div>
+        <div>
+            재고수량 : <input name="stockNumber" th:field="*{stockNumber}">
+        </div>
+        <div>
+            상세설명 : <input name="itemDetail" th:field="*{itemDetail}">
+        </div>
+        <button type="submit">저장</button>
+    </form>
+
+
+
+</th:block>
+<th:block layout:fragment="script">
+
+</th:block>
 </body>
 </html>
