@@ -3,12 +3,14 @@ package com.example.demo.service;
 import com.example.demo.dto.ItemDTO;
 import com.example.demo.entity.Item;
 import com.example.demo.repository.ItemRepository;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -19,10 +21,11 @@ public class ItemServiceImpl implements ItemService {
 
     private final ItemRepository itemRepository;
 
+
     private ModelMapper modelMapper = new ModelMapper();
 
 
-    @Override // 상품등록
+    @Override // 등록
     public ItemDTO register(ItemDTO itemDTO) {
         // modelMapper : DTO 와 Entity 간 변환을 도와주는 라이브러리
         // itemDTO 객체를 Item 클래스의 객체로 변환
@@ -34,5 +37,53 @@ public class ItemServiceImpl implements ItemService {
         itemDTO = modelMapper.map(item, ItemDTO.class);
         // 변환 된 ItemDTO 객체를 반환
         return itemDTO;
+    }
+
+    @Override // 목록
+    public List<ItemDTO> itemList() {
+
+        List<Item> itemList = itemRepository.findAll();
+
+        List<ItemDTO> itemDTOList = new ArrayList<>();
+
+        for (Item item : itemList){
+
+            ItemDTO itemDTO = modelMapper.map(item , ItemDTO.class);
+            itemDTOList.add(itemDTO);
+
+        }
+        return itemDTOList;
+    }
+
+    @Override // 읽기
+    public ItemDTO read(Long id) {
+
+        Item item = itemRepository.findById(id).orElseThrow(EntityNotFoundException::new);
+
+        ItemDTO itemDTO = modelMapper.map(item , ItemDTO.class);
+
+        return itemDTO;
+    }
+
+    @Override // 수정
+    public ItemDTO update(ItemDTO itemDTO) {
+
+        Item item = itemRepository.findById(itemDTO.getId()).orElseThrow(EntityNotFoundException::new);
+
+        item.setPrice(itemDTO.getPrice());                      // 가격
+        item.setIname(itemDTO.getIname());                      // 상품명
+        item.setItemDetail(itemDTO.getItemDetail());            // 상세설명
+        item.setItemSellStatus(itemDTO.getItemSellStatus());    // 판매여부
+        item.setStockNumber(itemDTO.getStockNumber());          // 수량
+
+        return itemDTO;
+    }
+
+    @Override // 삭제
+    public Long del(Long id) {
+
+        itemRepository.deleteById(id);
+
+        return id;
     }
 }
