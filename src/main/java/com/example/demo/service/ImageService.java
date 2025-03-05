@@ -7,6 +7,6 @@ import java.io.IOException;
 
 public interface ImageService {
 
-    public ImageDTO imageRegister(ImageDTO imageDTO, String repimgYn, MultipartFile multipartFile) throws IOException; // 저장(등록)
+    public ImageDTO imageRegister(Long item_id, String repimgYn, MultipartFile multipartFile) throws IOException; // 저장(등록)
 
 }

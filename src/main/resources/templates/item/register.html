@@ -6,12 +6,12 @@
 >
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>상품 등록</title>
 </head>
 <body>
 <th:block layout:fragment="content">
 
-    <form action="/item/register" method="post" th:object="${itemDTO}">
+    <form action="/item/register" method="post" th:object="${itemDTO}" enctype="multipart/form-data">
         <div>
             <select th:field="*{itemSellStatus}">
                 <option value="SELL">판매중</option>
@@ -31,13 +31,156 @@
             상세설명 : <input name="itemDetail" th:field="*{itemDetail}">
         </div>
         <button type="submit">저장</button>
+
+        <div class="row">
+            <div class="col">
+                <div class="row imageFreeView"></div>
+                <div class="row imageView row-cols-md-4 row-cols-1"></div>
+            </div>
+        </div>
+
+        <div class="imgA">
+            <label for="formFileSm1" class="form-label">대표 이미지</label>
+            <input name="multipartFilesMain" class="form-control multipartFilesMain imgInput form-control-sm" id="formFileSm1" type="file">
+        </div>
+        <div class="imgA">
+            <label for="formFileSm2" class="form-label">상세 이미지</label>
+            <input name="multipartFiles" class="form-control form-control-sm imgInput" id="formFileSm2" type="file">
+        </div>
+
     </form>
 
 
 
 </th:block>
 <th:block layout:fragment="script">
+    <script th:inline="javascript">
 
+        console.log("시작")
+        $(document).ready(function () {
+
+            let msg = [[${msg}]]
+            let imgA = $(".imgA")
+
+            // input:file 이벤트 처리
+            imgA.on("change" , "input" , function () {
+                // 파일에 대한 유효성 검사
+                let fileName = $(this).val().split("\\").pop()
+                console.log(fileName)
+
+                let fileExt = fileName.substring(fileName.lastIndexOf(".") + 1)
+
+                fileExt = fileExt.toLowerCase()
+                console.log(fileExt)
+
+                if (fileExt != "jpg" && fileExt != "jpeg" && fileExt != "gif" && fileExt != "png"
+                    && fileExt != "bmp" && fileExt != "jfif") {
+
+                    $(this).val("")
+                    alert("이미지 파일만 넣어주세요.")
+                    console.log("유효성 검사한 파일")
+                    return false;
+                }
+
+                if (this.classList.contains("multipartFilesMain")){
+                    readURLMain(this)
+                }else{
+                    readURL(this)
+                }
+
+
+            })
+
+            $("imageFreeView").on("click", "button", function () {
+                $(this).parent().remove();
+            })
+
+            imageInputCheck(msg)
+            function imageInputCheck(msg) {
+                if (msg){
+                    alert(msg)
+                }
+            }
+
+            // 미리보기 대표
+            function readURLMain(input) {
+                console.log("미리보기 시작(대표)")
+                if (input.files && input.files[0]){
+                    let reader = new FileReader()
+                    console.log("==================")
+                    reader.onload = function (e) {
+                        let inputTag = document.createElement("input")
+
+                        inputTag.type = "file"
+                        inputTag.name = "multipartFiles"
+
+                        const dataTransfer = new DataTransfer()
+                        const fileDatas = Array.from(input.files)
+
+                        fileDatas.forEach(file => dataTransfer.items.add(file))
+
+                        inputTag.files = dataTransfer.files;
+
+                        let str1 = `<div class="freeview col position-relative">
+                                        <img width="100%" src="${e.target.result}">
+                                        <button type="button" class="bb position-absolute top-0 end-0 btn btn-dark">
+                                        올리지않기
+                                        </button>
+                                    </div>`
+
+                        $(".imageFreeView").html(str1)
+                        $(".imageFreeView").find('div:eq(0)').append(inputTag)
+                        $(".imageFreeView").find('input').hide()
+                        $(".imgInput").val("")
+                        console.log("대표야 했노?")
+                    }
+                    reader.readAsDataURL(input.files[0])
+                    console.log("대표실행 다 했다 씁새야?")
+                }
+            }
+
+            // 미리보기(상세)
+            function readURL(input) {
+                console.log("미리보기 시작(상세)")
+                if (input.files && input.files[0]){
+                    let reader = new FileReader()
+                    console.log("======================")
+                    reader.onload = function (e) {
+                        let inputTag = document.createElement("input")
+
+                        inputTag.type = "file"
+                        inputTag.name = "multipartFiles"
+
+                        const dataTransfer = new DataTransfer()
+                        const fileDatas = Array.from(input.files)
+
+                        fileDatas.forEach(file => dataTransfer.items.add(file))
+
+                        inputTag.files = dataTransfer.files;
+
+                        let str1 = `<div class="freeview col position-relative">
+                                        <img width="100%" src="${e.target.result}">
+                                        <button type="button" class="bb position-absolute top-0 end-0 btn btn-dark">
+                                        올리지않기
+                                        </button>
+                                    </div>`
+
+                        $(".imageView").prepend(str1)
+                        $(".imageView").find('div:eq(0)').append(inputTag)
+                        $(".imageView").find('input').hide()
+                        $(".imgInput").val("")
+                        console.log("상세야 했노?")
+                    }
+                    reader.readAsDataURL(input.files[0])
+                    console.log("상세실행 다 했다 씁새야?")
+                }
+            }
+
+
+
+        })
+
+    </script>
 </th:block>
 </body>
 </html>
