@@ -29,13 +29,13 @@ public class ImageServiceImpl implements ImageService{
     private ModelMapper modelMapper = new ModelMapper();
 
     @Override
-    public ImageDTO imageRegister(ImageDTO imageDTO, String repimgYn, MultipartFile multipartFile) throws IOException {
+    public ImageDTO imageRegister(Long item_id, String repimgYn, MultipartFile multipartFile) throws IOException {
 
         ImageDTO imgDTO = fileService.uploadFile(multipartFile);
 
         Image image = modelMapper.map(imgDTO, Image.class);
 
-        Item item = itemRepository.findById(image.getId()).orElseThrow(EntityNotFoundException::new);
+        Item item = itemRepository.findById(item_id).orElseThrow(EntityNotFoundException::new);
 
         Image img = null;
 

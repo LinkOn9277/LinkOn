@@ -2,11 +2,15 @@ package com.example.demo.dto;
 
 import com.example.demo.constant.Role;
 import jakarta.persistence.*;
+import lombok.*;
 
+@Getter
+@Setter
+@ToString
+@NoArgsConstructor
+@AllArgsConstructor
 public class UsersDTO {
 
-
-    private Long id; // 회원 번호
 
     private String name; // 이름
 

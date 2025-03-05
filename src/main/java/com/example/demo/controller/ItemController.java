@@ -13,7 +13,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.Mapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.io.IOException;
 import java.util.List;
 
 @Controller
@@ -31,13 +34,20 @@ public class ItemController {
     }
 
     @PostMapping("/register") // 등록 POST
-    public String registerPost(@Valid ItemDTO itemDTO, BindingResult bindingResult) {
+    public String registerPost(@Valid ItemDTO itemDTO, BindingResult bindingResult,MultipartFile multipartFilesMain, MultipartFile[] multipartFiles, RedirectAttributes redirectAttributes) {
         log.info("상품 등록 POST 진입");
 
         if (bindingResult.hasErrors()) { return "item/register"; }
 
-        itemDTO = itemService.register(itemDTO);
-        log.info("저장된 데이터 : " + itemDTO);
+        try {
+            itemDTO = itemService.register(itemDTO , multipartFiles, multipartFilesMain);
+            log.info("저장된 데이터 : " + itemDTO);
+        }catch (IOException e){
+            //사진에 관한 예외처리 메시지 담기
+            // 담은거 html에서 처리 해주기
+            return "item/register";
+        }
+
 
         log.info("상품 등록 POST 종료");
         return "item/register";

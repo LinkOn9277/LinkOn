@@ -12,8 +12,6 @@ import lombok.*;
 public class ImageDTO {
 
 
-    private Long id;
-
     private String imgName;
 
     private String orimgName;
