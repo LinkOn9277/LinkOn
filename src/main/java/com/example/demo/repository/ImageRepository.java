@@ -9,7 +9,7 @@ public interface ImageRepository extends JpaRepository<Image, Long> {
 
     public List<Image> findByItemId(Long id);
 
-    public Image findByItemAndRepimgYn(Long id , String y);
+    public Image findByItemIdAndRepimgYn(Long id , String y);
 
 
 }

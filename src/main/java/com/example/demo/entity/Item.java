@@ -34,9 +34,9 @@ public class Item extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "categorys_id")
     private Categorys categorys;
-
-    private LocalDateTime regTime; // 상품 등록시간
-    private LocalDateTime updateTime; // 상품 수정시간
+//
+//    private LocalDateTime regTime; // 상품 등록시간
+//    private LocalDateTime updateTime; // 상품 수정시간
 
 
 

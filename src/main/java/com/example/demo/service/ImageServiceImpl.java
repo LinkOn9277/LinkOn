@@ -40,7 +40,7 @@ public class ImageServiceImpl implements ImageService{
         Image img = null;
 
         if (repimgYn != null){
-            img = imageRepository.findByItemAndRepimgYn(item.getId(), repimgYn);
+            img = imageRepository.findByItemIdAndRepimgYn(item.getId(), repimgYn);
         }
 
         if (img != null){
