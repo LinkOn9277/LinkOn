@@ -28,11 +28,12 @@ public class SecurityConfig {
                 .authorizeHttpRequests(
                 // URL을 통해서 들어오는 인가, 권한 에 따른 접속 여부
                         (AuthorizeHttpRequests) -> AuthorizeHttpRequests
-                                // 해당 url을 모든 사용자가 접속가능
-                                .requestMatchers("/user/login/**", "/user/signUp", "/css/**", "/js/**", "/").permitAll()
-                                // 권한이 ADMIN인 사람은 해당페이지에 접속가능
-                                .requestMatchers("/admin/item/**").hasRole("ADMIN")
-                                .requestMatchers("/orders/**").authenticated() // 로그인이 되어있어만 하는 주소
+//                                // 해당 url을 모든 사용자가 접속가능
+                                .requestMatchers("/**").permitAll()
+//                                .requestMatchers("/user/login/**", "/user/signUp", "/css/**", "/js/**", "/").permitAll()
+//                                // 권한이 ADMIN인 사람은 해당페이지에 접속가능
+//                                .requestMatchers("/admin/item/**").hasRole("ADMIN")
+//                                .requestMatchers("/orders/**").authenticated() // 로그인이 되어있어만 하는 주소
 
                                 .anyRequest().permitAll()
 

@@ -8,6 +8,7 @@ import jakarta.validation.constraints.PositiveOrZero;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 @Setter
@@ -41,7 +42,6 @@ public class ItemDTO {
 
     private String createBy;
 
-
-
+    private List<ImageDTO> imageDTOList;
 
 }

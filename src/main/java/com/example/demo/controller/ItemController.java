@@ -1,6 +1,8 @@
 package com.example.demo.controller;
 
 import com.example.demo.dto.ItemDTO;
+import com.example.demo.dto.RequestPageDTO;
+import com.example.demo.dto.ResponesPageDTO;
 import com.example.demo.entity.Item;
 import com.example.demo.service.ItemService;
 import jakarta.validation.Valid;
@@ -17,6 +19,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.IOException;
+import java.security.Principal;
 import java.util.List;
 
 @Controller
@@ -54,10 +57,12 @@ public class ItemController {
     }
 
     @GetMapping("/list") // 목록 GET
-    public String list(Model model){
+    public String list(RequestPageDTO requestPageDTO, Model model){
         log.info("상품 리스트 진입");
 
-        List<ItemDTO> itemDTOList = itemService.itemList();
+        // ResponesPageDTO<ItemDTO> responesPageDTO = itemService.itemList(requestPageDTO);
+
+        // model.addAttribute("responesPageDTO", responesPageDTO);
 
         return "item/list";
     }
