@@ -6,7 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 
-public interface ItemRepository extends JpaRepository<Item, Long> {
+public interface ItemRepository extends JpaRepository<Item, Long> , Search{
     // 쿼리 메소드를 이용할 때 가장 많이 사용하는 문법으로 find 사용
     // 엔티티의 이름은 생략이 가능
     // By 뒤에는 검색할 때 사용할 변수의 이름을 적어줌
@@ -22,5 +22,6 @@ public interface ItemRepository extends JpaRepository<Item, Long> {
 
     @Query("select i from Item i where i.iname like '%' || :keyword || '%' or i.itemDetail like concat('%' , :keyword , '%') ")
     public List<Item> selectInDetail(String keyword);
+
 
 }

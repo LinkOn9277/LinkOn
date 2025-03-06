@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout1}"
+>
+<head>
+  <meta charset="UTF-8">
+  <title>회원가입</title>
+</head>
+<body>
+  <th:block layout:fragment="content">
+
+    <form action="/user/signUp" method="post" th:object="${usersDTO}">
+
+      <div class="card">
+        <div class="card-body">
+          <input type="text" th:field="*{name}"><br>
+          <input type="email" th:field="*{email}"><br>
+          <input type="password" th:field="*{password}"><br>
+          <input type="text" th:field="*{phone}"><br>
+          <input type="text" th:field="*{resident}"><br>
+          <input type="text" th:field="*{addr}"><br>
+          <button type="submit">가입하기</button>
+        </div>
+      </div>
+
+    </form>
+
+  </th:block>
+
+  <th:block layout:fragment="script">
+    <script>
+
+
+
+
+    </script>
+    <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+  </th:block>
+</body>
+</html>
