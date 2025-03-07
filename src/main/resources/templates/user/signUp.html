@@ -31,7 +31,7 @@
   <th:block layout:fragment="content">
 
 
-    <form action="/user/signUp" method="post">
+    <form action="/user/signUp" method="post" onsubmit="aa()">
 
       <!-- 이름 -->
       <div class="form-group">
@@ -43,9 +43,9 @@
       <div class="form-group">
         <label>이메일 :</label>
         <div class="email-group">
-          <input type="text" class="form-control" name="email" placeholder="아이디" required>
+          <input type="text" class="form-control a" name="a"  placeholder="아이디" required>
           <span>@</span>
-          <select class="form-select" name="email">
+          <select class="form-select b" name="b">
             <option value="naver.com">naver.com</option>
             <option value="gmail.com">gmail.com</option>
             <option value="daum.net">daum.net</option>
@@ -109,7 +109,17 @@
   <th:block layout:fragment="script">
     <script>
 
+      function aa() {
 
+        let email1 = $(".a").val()
+        let email2 = $(".b").val()
+
+        let str = `<input name="email" type="hidden" value="${email1+'@'+email2}">`
+        $("form").append(str)
+
+        return true;
+
+      }
 
 
     </script>
