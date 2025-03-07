@@ -15,6 +15,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
+
 @Service
 @Transactional
 @Log4j2
@@ -29,23 +31,25 @@ public class UsersServiceImpl implements UsersService , UserDetailsService{
     public String sigUp(UsersDTO usersDTO) {
 
         Users users = modelMapper.map(usersDTO, Users.class);
+        log.info("서비스에서 받아온 값 : " + users);
 
-        users = usersRepository.findByEmail(users.getEmail());
-        if (users != null){
+        Users usersCheck = usersRepository.findByEmail(users.getEmail());
+        log.info("서비스에 받아온 값을 다시 초기화 해서 저장 : " + users);
+        if (usersCheck != null){
             log.info("이미 가입된 회원입니다.");
             throw new IllegalStateException("이미 가입된 회원입니다.");
         }else {
             log.info("가입되지 않은 회원입니다.");
+            users.setPassword(passwordEncoder.encode(usersDTO.getPassword()));
+            log.info("패스워드 반환 값 : " + users.getPassword());
+
+            users.setRole(Role.ADMIN);
             usersRepository.save(users);
+            usersDTO = modelMapper.map(users, UsersDTO.class);
+
+            return usersDTO.getName();
         }
-        users.setPassword(passwordEncoder.encode(usersDTO.getPassword()));
-        log.info("패스워드 반환 값 : " + users.getPassword());
 
-        users.setRole(Role.ADMIN);
-
-        usersDTO = modelMapper.map(users, UsersDTO.class);
-
-        return usersDTO.getName();
     }
 
     @Override
@@ -69,18 +73,12 @@ public class UsersServiceImpl implements UsersService , UserDetailsService{
 
         if (users.getRole().name().equals(Role.ADMIN.name())){
             log.info("관리자 로그인 시도중");
-            // 현재 로그인 시도하는 사람의 롤을 가져와서 name()메소드로 ToString값을
-            // role 변수에 할당
             role = users.getRole().name();
         }else {
             log.info("일반유저 로그인 시도중");
             role = users.getRole().name();
         }
 
-        // 시큐리티에서 말하는 username 사용자 이름이 아니라
-        // 인증을 하는 필드 email 또는 user_id 등을 말한다.
-        // DB에 있는 password(비밀번호)를 UserDetails 객체에 담아서 보내면
-        // 호출한 컨트롤러에 해당 객체를 받아 브라우저에서 입력한 비밀번호와 비교하여 로그인시도
         UserDetails userDetails =
                 User.builder().username(users.getEmail())
                         .password(users.getPassword())

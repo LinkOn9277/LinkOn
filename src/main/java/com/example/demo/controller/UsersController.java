@@ -26,7 +26,7 @@ public class UsersController {
     }
 
     @PostMapping("/signUp")
-    public String sigUpPost(@Valid UsersDTO usersDTO, BindingResult bindingResult){
+    public String sigUpPost(UsersDTO usersDTO, BindingResult bindingResult){
         log.info("회원가입 POST 진입 : " + usersDTO);
         if (bindingResult.hasErrors()){
             log.info("유효성 검사 실패");
@@ -39,7 +39,7 @@ public class UsersController {
             return "user/signUp";
         }
         log.info("회원가입 POST 종료");
-        return "redirect:/user/signUp";
+        return "redirect:/user/login";
     }
 
 }

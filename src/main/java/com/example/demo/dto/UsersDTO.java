@@ -38,7 +38,7 @@ public class UsersDTO {
     private String addr; // 주소
 
 
-    private Role role;
+    private String role;
 
 
 }

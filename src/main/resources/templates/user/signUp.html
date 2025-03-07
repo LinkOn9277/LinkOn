@@ -7,25 +7,102 @@
 <head>
   <meta charset="UTF-8">
   <title>회원가입</title>
+  <style>
+    body {
+      background-color: #d3d3d3;
+    }
+    .container {
+      max-width: 500px;
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+    }
+    .form-group {
+      margin-bottom: 15px;
+    }
+    .email-group, .phone-group, .id-group {
+      display: flex;
+      gap: 5px;
+    }
+  </style>
 </head>
 <body>
   <th:block layout:fragment="content">
 
-    <form action="/user/signUp" method="post" th:object="${usersDTO}">
 
-      <div class="card">
-        <div class="card-body">
-          <input type="text" th:field="*{name}"><br>
-          <input type="email" th:field="*{email}"><br>
-          <input type="password" th:field="*{password}"><br>
-          <input type="text" th:field="*{phone}"><br>
-          <input type="text" th:field="*{resident}"><br>
-          <input type="text" th:field="*{addr}"><br>
-          <button type="submit">가입하기</button>
+    <form action="/user/signUp" method="post">
+
+      <!-- 이름 -->
+      <div class="form-group">
+        <label>이름 :</label>
+        <input type="text" class="form-control" name="name" placeholder="이름 입력" required>
+      </div>
+
+      <!-- 이메일 -->
+      <div class="form-group">
+        <label>이메일 :</label>
+        <div class="email-group">
+          <input type="text" class="form-control" name="email" placeholder="아이디" required>
+          <span>@</span>
+          <select class="form-select" name="email">
+            <option value="naver.com">naver.com</option>
+            <option value="gmail.com">gmail.com</option>
+            <option value="daum.net">daum.net</option>
+          </select>
         </div>
       </div>
 
+      <!-- 비밀번호 -->
+      <div class="form-group">
+        <label>비밀번호 :</label>
+        <input type="password" class="form-control" name="password" placeholder="비밀번호 입력" required>
+      </div>
+
+      <!-- 핸드폰 번호 -->
+      <div class="form-group">
+        <label>핸드폰 번호 :</label>
+        <div class="phone-group">
+          <select class="form-select" name="phone">
+            <option value="010">010</option>
+            <option value="011">011</option>
+            <option value="016">016</option>
+          </select>
+          <input type="text" class="form-control" name="phone" maxlength="4" required>
+          <input type="text" class="form-control" name="phone" maxlength="4" required>
+        </div>
+      </div>
+
+      <!-- 주민등록번호 -->
+      <div class="form-group">
+        <label>주민등록번호 :</label>
+        <div class="id-group">
+          <input type="text" class="form-control" name="resident" maxlength="6" placeholder="앞 6자리" required>
+          <span>-</span>
+          <input type="password" class="form-control" name="idLast" maxlength="7" placeholder="뒤 7자리" required>
+        </div>
+      </div>
+
+      <!-- 주소 -->
+      <div class="form-group">
+        <label>주소 :</label>
+        <div class="d-flex">
+          <input type="text" class="form-control" name="addr" placeholder="우편번호" required>
+          <button type="button" class="btn btn-secondary ms-2">우편번호 찾기</button>
+        </div>
+        <input type="text" class="form-control mt-2" name="addr" placeholder="도로명, 시/구/동">
+      </div>
+
+      <!-- 버튼 -->
+      <div class="d-flex justify-content-between mt-4">
+        <input hidden type="text" name="role" value="ADMIN">
+        <button type="submit" class="btn btn-primary">회원가입</button>
+      </div>
+
+
     </form>
+
+
 
   </th:block>
 
