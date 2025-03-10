@@ -12,25 +12,29 @@
 <th:block layout:fragment="content">
 
     <form action="/item/register" method="post" th:object="${itemDTO}" enctype="multipart/form-data">
+
         <div>
             <select th:field="*{itemSellStatus}">
                 <option value="SELL">판매중</option>
                 <option value="SOLE_OUT">품절</option>
             </select>
         </div>
+
         <div>
             상품명 : <input name="iname" th:field="*{iname}">
         </div>
+
         <div>
             가격 : <input name="price" th:field="*{price}">
         </div>
+
         <div>
             재고수량 : <input name="stockNumber" th:field="*{stockNumber}">
         </div>
+
         <div>
             상세설명 : <input name="itemDetail" th:field="*{itemDetail}">
         </div>
-        <button type="submit">저장</button>
 
         <div class="row">
             <div class="col">
@@ -47,6 +51,8 @@
             <label for="formFileSm2" class="form-label">상세 이미지</label>
             <input name="multipartFiles" class="form-control form-control-sm imgInput" id="formFileSm2" type="file">
         </div>
+
+        <button type="submit">저장</button>
 
     </form>
 
@@ -112,7 +118,7 @@
                         let inputTag = document.createElement("input")
 
                         inputTag.type = "file"
-                        inputTag.name = "multipartFiles"
+                        inputTag.name = "multipartFilesMain"
 
                         const dataTransfer = new DataTransfer()
                         const fileDatas = Array.from(input.files)
