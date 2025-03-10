@@ -6,6 +6,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Getter
@@ -34,6 +35,10 @@ public class Item extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "categorys_id")
     private Categorys categorys;
+
+    @OneToMany(mappedBy = "item" , fetch = FetchType.LAZY)
+    private List<Image> imageList;
+
 
 //    private LocalDateTime regTime; // 상품 등록시간
 //    private LocalDateTime updateTime; // 상품 수정시간

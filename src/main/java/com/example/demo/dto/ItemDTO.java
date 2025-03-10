@@ -44,4 +44,8 @@ public class ItemDTO {
 
     private List<ImageDTO> imageDTOList;
 
+    public ItemDTO setImageDTOList(List<ImageDTO> imageDTOList) {
+        this.imageDTOList = imageDTOList;
+        return this;
+    }
 }

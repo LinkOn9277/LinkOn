@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout1}"
+>
+<head>
+    <meta charset="UTF-8">
+    <title>아이템 수정</title>
+</head>
+<body>
+<th:block layout:fragment="content">
+    <h1>아이템 수정</h1>
+
+    <form action="/item/update" method="post" enctype="multipart/form-data" th:object="${itemDTO}">
+        <button>저장</button>
+
+    <th:block th:each="imageDTO : ${itemDTO.imageDTOList}">
+
+
+    </th:block>
+
+
+
+    </form>
+
+
+
+
+
+
+</th:block>
+<th:block layout:fragment="script">
+
+</th:block>
+</body>
+</html>

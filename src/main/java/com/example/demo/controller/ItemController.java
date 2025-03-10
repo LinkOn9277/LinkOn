@@ -21,6 +21,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.IOException;
 import java.security.Principal;
+import java.util.Arrays;
 import java.util.List;
 
 @Controller
@@ -30,6 +31,8 @@ import java.util.List;
 public class ItemController {
 
     private final ItemService itemService;
+
+
 
     @GetMapping("/register") // 등록 GET
     public String register(ItemDTO itemDTO) {
@@ -101,7 +104,7 @@ public class ItemController {
         log.info("상품 리스트 진입");
         log.info("상품 리스트 진입");
 
-        ResponesPageDTO<ItemDTO> responesPageDTO = itemService.itemList(principal.getName(), requestPageDTO);
+        ResponesPageDTO<ItemDTO> responesPageDTO = itemService.itemList(principal.getName(), requestPageDTO, 1);
 
         model.addAttribute("responesPageDTO", responesPageDTO);
 
@@ -145,8 +148,8 @@ public class ItemController {
 
     }
 
-    @GetMapping("/modify") // 수정 GET
-    public String modify(Long id){
+    @GetMapping("/update") // 수정 GET
+    public String update(Long id, Model model, Principal principal, RedirectAttributes redirectAttributes){
         log.info("상품 수정 GET 진입");
         log.info("상품 수정 GET 진입");
         log.info("상품 수정 GET 진입");
@@ -154,30 +157,74 @@ public class ItemController {
 
         if (id == null){ return "redirect:/item/list"; }
 
-        ItemDTO itemDTO = itemService.read(id);
+        try {
+
+          ItemDTO itemDTO = itemService.read(id);
+          log.info("상품정보" + itemDTO);
+
+          if (!itemDTO.getCreateBy().equals(principal.getName())){
+              log.info("수정 실패 리스트 페이지로 이동");
+              return "redirect:/item/list";
+          }
+
+          model.addAttribute("itemDTO", itemDTO);
+          return "item/updete";
+
+        }catch (EntityNotFoundException e){
+            redirectAttributes.addFlashAttribute("msg", "존재하지 않는 상품입니다.");
+        }
 
         log.info("상품 수정 GET 종료");
         log.info("상품 수정 GET 종료");
         log.info("상품 수정 GET 종료");
         log.info("상품 수정 GET 종료");
 
-        return "item/modify";
+        return "redirect:/item/list";
     }
 
-    @PostMapping("/modify") // 수정 POST
-    public String modifyPost(ItemDTO itemDTO){
+    @PostMapping("/update") // 수정 POST
+    public String updatePost(@Valid ItemDTO itemDTO, MultipartFile[] multipartFiles, MultipartFile multipartFileMain, Long[] delino){
         log.info("상품 수정 Post 진입");
         log.info("상품 수정 Post 진입");
         log.info("상품 수정 Post 진입");
         log.info("상품 수정 Post 진입");
 
-        // itemDTO = itemService.update(itemDTO);
+        if (!multipartFileMain.isEmpty()){
+            log.info(multipartFileMain.getOriginalFilename());
+        }else {
+            log.info("등록되는 메인 이미지가 없습니다.");
+        }
+
+        if (multipartFiles != null){
+            for (MultipartFile file : multipartFiles){
+                if (!file.isEmpty()){
+                    log.info("들어온 상세 이미지");
+                    log.info(file.getOriginalFilename());
+                }
+            }
+        }else {
+            log.info("등록되는 상세 이미지가 없습니다.");
+        }
+
+        if (delino != null && delino.length != 0){
+            log.info(Arrays.toString(delino));
+        }
+        log.info(itemDTO);
+
+        try {
+          itemService.update(itemDTO, multipartFiles, multipartFileMain, delino);
+        }catch (IOException e){
+          log.info("이미지 수정 실패");
+          return "redirect:/item/read?id=" + itemDTO.getId();
+        }
+
 
         log.info("상품 수정 Post 종료");
         log.info("상품 수정 Post 종료");
         log.info("상품 수정 Post 종료");
         log.info("상품 수정 Post 종료");
-        return null;
+
+        return "redirect:/item/read?id=";
     }
 
     @PostMapping("/del")

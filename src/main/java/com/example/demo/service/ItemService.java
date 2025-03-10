@@ -16,7 +16,7 @@ public interface ItemService {
 
     public ItemDTO register(ItemDTO itemDTO, MultipartFile[] multipartFiles ,MultipartFile multipartFile) throws IOException; // 등록
 
-    public ResponesPageDTO<ItemDTO> itemList(String email, RequestPageDTO requestPageDTO); // 목록
+    public ResponesPageDTO<ItemDTO> itemList(String email, RequestPageDTO requestPageDTO, int itemListPage); // 목록
 
     public ItemDTO read(Long id); // 읽기
 
