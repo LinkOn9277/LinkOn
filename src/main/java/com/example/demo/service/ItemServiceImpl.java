@@ -63,19 +63,43 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override // 목록
-    public ResponesPageDTO<ItemDTO> itemList(String email, RequestPageDTO requestPageDTO) {
+    public ResponesPageDTO<ItemDTO> itemList(String email, RequestPageDTO requestPageDTO, int itemListPage) {
 
         Pageable pageable = requestPageDTO.getPageable("id"); // 정렬 조건추가
 
-        Page<Item> itemPage = itemRepository.search(requestPageDTO.getTypes(), requestPageDTO.getKeyword(), email, pageable);
 
-        List<Item> itemList = itemPage.getContent(); // Item 변환
 
-        List<ItemDTO> itemDTOList = itemList.stream().map(item -> modelMapper.map(item, ItemDTO.class)).collect(Collectors.toList()); // DTO 변환
+        // 일반
+        if (itemListPage == 1){
+            Page<Item> itemPage = itemRepository.search(requestPageDTO.getTypes(), requestPageDTO.getKeyword(), email, pageable);
 
-        int total = (int) itemPage.getTotalElements(); // 총 게시글 수
+            List<Item> itemList = itemPage.getContent(); // Item 변환
+            List<ItemDTO> itemDTOList = itemList.stream().map(item -> modelMapper.map(item, ItemDTO.class)).collect(Collectors.toList()); // DTO 변환
 
-        return new ResponesPageDTO<>(requestPageDTO, itemDTOList, total); // ResponesPageDTO 생성자 생성
+            int total = (int) itemPage.getTotalElements(); // 총 게시글 수
+
+            return new ResponesPageDTO<>(requestPageDTO, itemDTOList, total); // ResponesPageDTO 생성자 생성
+        }
+        // 메인
+        else {
+            Page<Item> itemPage = itemRepository.mainList(requestPageDTO.getTypes(), requestPageDTO.getKeyword(),requestPageDTO.getSearchDateType() ,pageable);
+
+            // Item 변환
+            List<Item> itemList = itemPage.getContent();
+
+            List<ItemDTO> itemDTOList = itemList.stream()
+                    .map( item -> modelMapper.map(item, ItemDTO.class)
+                            .setImageDTOList(item.getImageList().stream().map(
+                                    imgEntity -> modelMapper.map(imgEntity, ImageDTO.class)
+                            ).collect(Collectors.toList())  ))
+                    .collect(Collectors.toList());
+
+            // 총 게시글 수
+            int total = (int) itemPage.getTotalElements();
+
+            return new ResponesPageDTO<>(requestPageDTO, itemDTOList, total);
+        }
+
     }
 
     @Override // 읽기
