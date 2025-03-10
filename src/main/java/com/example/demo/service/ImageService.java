@@ -13,6 +13,10 @@ public interface ImageService {
 
     public ImageDTO imageRegister(Long item_id, String repimgYn, MultipartFile multipartFile) throws IOException; // 저장(등록)
 
+    public List<ImageDTO> read(Long item_id); // 읽기
+
+    public void del(Long ino);
+
 
 
 }

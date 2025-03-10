@@ -21,6 +21,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -66,4 +67,25 @@ public class ImageServiceImpl implements ImageService{
         return imgDTO;
     }
 
+    @Override //읽기
+    public List<ImageDTO> read(Long item_id) {
+        List<Image> imageList = imageRepository.findByItemId(item_id);
+        List<ImageDTO> imageDTOList = imageList.stream()
+                .map(image -> modelMapper.map(image, ImageDTO.class))
+                .collect(Collectors.toList());
+        return imageDTOList;
+    }
+
+    @Override
+    public void del(Long ino) {
+
+        Image image = imageRepository.findById(ino).orElseThrow(EntityNotFoundException::new);
+
+        if (image != null){
+            String path = image.getIurl() + image.getImgName();
+            fileService.del(path);
+            imageRepository.delete(image);
+        }
+
+    }
 }

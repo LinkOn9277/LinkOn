@@ -79,28 +79,52 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override // 읽기
-    public ItemDTO read(Long id) {
+    public ItemDTO read(Long item_id) {
 
-        Item item = itemRepository.findById(id).orElseThrow(EntityNotFoundException::new);
+        Item item = itemRepository.findById(item_id).orElseThrow(EntityNotFoundException::new);
+
+        List<ImageDTO> imageDTOList = imageService.read(item_id);
 
         ItemDTO itemDTO = modelMapper.map(item , ItemDTO.class);
+
+        itemDTO.setImageDTOList(imageDTOList);
 
         return itemDTO;
     }
 
 
     @Override // 수정
-    public ItemDTO update(ItemDTO itemDTO) {
+    public ItemDTO update(ItemDTO itemDTO, MultipartFile[] multipartFile , MultipartFile mainimg , Long[] delino) throws IOException {
 
         Item item = itemRepository.findById(itemDTO.getId()).orElseThrow(EntityNotFoundException::new);
 
-        item.setPrice(itemDTO.getPrice());                    // 가격
+        item.setPrice(itemDTO.getPrice());                      // 가격
         item.setIname(itemDTO.getIname());                      // 상품명
         item.setItemDetail(itemDTO.getItemDetail());            // 상세설명
         item.setItemSellStatus(itemDTO.getItemSellStatus());    // 판매여부
         item.setStockNumber(itemDTO.getStockNumber());          // 수량
 
-        return itemDTO;
+        // 이미지 삭제
+        if (delino != null && delino.length > 0){
+            for (Long num : delino){
+                imageService.del(num);
+            }
+        }
+
+        // 이미지 등록
+        String repimgYn = null;
+
+        if (mainimg != null && !mainimg.isEmpty()){
+            imageService.imageRegister(item.getId(), "Y", mainimg);
+        }
+
+        if (multipartFile != null){
+            for (int i = 0; i <multipartFile.length; i++){
+                imageService.imageRegister(item.getId(), repimgYn, multipartFile[i]);
+            }
+        }
+
+        return modelMapper.map(item, ItemDTO.class);
     }
 
     @Override // 삭제

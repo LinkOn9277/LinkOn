@@ -20,7 +20,7 @@ public interface ItemService {
 
     public ItemDTO read(Long id); // 읽기
 
-    public ItemDTO update(ItemDTO itemDTO); // 수정
+    public ItemDTO update(ItemDTO itemDTO, MultipartFile[] multipartFile , MultipartFile mainimg , Long[] delino) throws IOException; // 수정
 
     public Long del(Long id); // 삭제
 

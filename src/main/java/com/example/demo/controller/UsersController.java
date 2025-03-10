@@ -28,9 +28,11 @@ public class UsersController {
     @PostMapping("/signUp")
     public String sigUpPost(@Valid UsersDTO usersDTO, BindingResult bindingResult){
         log.info("회원가입 POST 진입 : " + usersDTO);
+        log.info("회원가입 POST 진입 : " + usersDTO.getEmail().replace(",","@"));
+
         if (bindingResult.hasErrors()){
             log.info("유효성 검사 실패");
-            log.info(bindingResult.hasErrors());
+            log.info(bindingResult.getAllErrors());
             return "user/signUp";
         }
         try {
@@ -39,7 +41,13 @@ public class UsersController {
             return "user/signUp";
         }
         log.info("회원가입 POST 종료");
-        return "redirect:/user/signUp";
+        return "redirect:/user/login";
+    }
+
+    @GetMapping("login")
+    public String login(){
+        log.info("로그인 페이지 진입");
+        return "user/login";
     }
 
 }

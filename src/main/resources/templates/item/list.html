@@ -6,12 +6,43 @@
 >
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>아이템 목록</title>
 </head>
 <body>
 <th:block layout:fragment="content">
+    <h1>아이템 목록</h1>
 
-    [[${responesPageDTO}]]
+    <th:block th:if="${responesPageDTO.dtoList == null or responesPageDTO.dtoList.size() == 0}">
+
+    </th:block>
+
+    <th:block th:if="${responesPageDTO.dtoList != null and responesPageDTO.dtoList.size() != 0}">
+        <table>
+            <thead>
+                <tr>#</tr>
+                <tr>상품명</tr>
+                <tr>가격</tr>
+                <tr>수량</tr>
+                <tr>판매여부</tr>
+                <tr>수정날짜</tr>
+            </thead>
+            <tbody>
+            <th:block th:each="itemDTO : ${responesPageDTO.dtoList}">
+                <tr>
+                  <td th:text="${itemDTO.id}"></td>
+                  <td>
+                      <a th:href="@{/item/read(id=${itemDTO.id})}" />
+                      [[${itemDTO.iname}]]
+                  </td>
+                  <td th:text="${itemDTO.price}"></td>
+                  <td th:text="${itemDTO.stockNumber}"></td>
+                  <td th:text="${itemDTO.itemSellStatus == 'SELL' ? '판매중' : '품절'}"></td>
+                  <td th:text="${#temporals.format(itemDTO.updateTime, 'yyyy-MM-dd')}"></td>
+                </tr>
+            </th:block>
+            </tbody>
+        </table>
+    </th:block>
 
 
 
