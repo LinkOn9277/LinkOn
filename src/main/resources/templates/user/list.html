@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout1}"
+>
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<th:block layout:fragment="content">
+    [[${usersDTOList}]]
+    <table>
+        <tr>
+            <th></th>
+        </tr>
+        <tr th:each="users : ${usersDTOList}">
+            <td th:text="${users.getName()}"></td>
+            <td th:text="${users.getEmail()}"></td>
+            <td th:text="${users.getPassword()}"></td>
+            <td th:text="${users.getPhone()}"></td>
+            <td th:text="${users.getResident()}"></td>
+            <td th:text="${users.getAddr()}"></td>
+            <td th:text="${users.getRole()}"></td>
+        </tr>
+    </table>
+
+
+
+</th:block>
+</body>
+</html>

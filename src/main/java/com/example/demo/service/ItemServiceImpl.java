@@ -67,8 +67,6 @@ public class ItemServiceImpl implements ItemService {
 
         Pageable pageable = requestPageDTO.getPageable("id"); // 정렬 조건추가
 
-
-
         // 일반
         if (itemListPage == 1){
             Page<Item> itemPage = itemRepository.search(requestPageDTO.getTypes(), requestPageDTO.getKeyword(), email, pageable);
