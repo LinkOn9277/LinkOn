@@ -120,13 +120,17 @@ public class ItemController {
         log.info("상품 정보 GET 진입");
         log.info("상품 정보 GET 진입");
         log.info("상품 정보 GET 진입");
-        log.info("상품 정보 GET 진입");
-        if (id == null){ return "redirect:/item/list"; }
+        log.info("상품 정보로 들어온 ID : " + id);
+
+        if (id == null){
+            return "redirect:/item/list";
+        }
 
         try {
             ItemDTO itemDTO = itemService.read(id);
 
             if(!itemDTO.getCreateBy().equals(principal.getName())){
+                log.info("여기실행");
                 return "redirect:/item/list";
             }
 
@@ -142,6 +146,7 @@ public class ItemController {
             log.info("상품 정보 GET 종료");
             log.info("상품 정보 GET 종료");
             log.info("상품 정보 GET 종료");
+
             return "redirect:/item/list";
         }
 
