@@ -11,7 +11,68 @@
 <body>
 <th:block layout:fragment="content">
 
-<h1>느에에에엑 상품정보</h1>
+<h1>상품정보</h1>
+
+    <form action="/item/register" method="post" th:object="${itemDTO}" enctype="multipart/form-data">
+
+        <div>
+            <th:block th:each="imageDTO : ${itemDTO.imageDTOList}">
+                <th:block th:if="${imageDTO.repimgYn == 'Y'}">
+                    <img width="100%" th:src="${'/images/' + imageDTO.imgName}">
+                </th:block>
+            </th:block>
+        </div>
+
+        <div>
+            <th:block th:if="${itemDTO.itemSellStatus.name() == 'SELL'}">
+                <span class="badge text-bg-success">판매중</span>
+            </th:block>
+            <th:block th:if="${itemDTO.itemSellStatus.name() == 'SOLD_OUT'}">
+                <span class="badge text-bg-danger">품절</span>
+            </th:block>
+        </div>
+
+        <div>
+            <div>상품번호</div>
+            <div th:text="${itemDTO.id}"></div>
+        </div>
+
+        <div>
+            <div>상품명</div>
+            <div th:field="*{iname}"></div>
+        </div>
+
+        <div>
+            <div>가격</div>
+            <div th:field="*{price}"></div>
+        </div>
+
+        <div>
+            <div>재고수량</div>
+            <div th:field="*{stockNumber}"></div>
+        </div>
+
+        <div>
+            <div>등록시간</div>
+            <div th:text="${#temporals.format(itemDTO.regTime, 'yyyy-MM-dd')}"></div>
+        </div>
+        <div>
+            <div>수정시간</div>
+            <div th:text="${#temporals.format(itemDTO.updateTime, 'yyyy-MM-dd')}"></div>
+        </div>
+
+        <div>
+            <div th:text="${itemDTO.itemDetail}"></div>
+        </div>
+
+
+        <th:block th:each="imageDTO : ${itemDTO.imageDTOList}">
+            <div th:if="${imageDTO.getRepimgYn() != 'Y'}">
+                <img th:src="${'images/' + imageDTO.imgName}" th:alt="${imageDTO.orimgName}">
+            </div>
+        </th:block>
+
+    </form>
 
 
 </th:block>

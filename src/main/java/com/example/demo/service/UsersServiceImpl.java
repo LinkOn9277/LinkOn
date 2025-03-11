@@ -15,6 +15,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -85,5 +87,29 @@ public class UsersServiceImpl implements UsersService , UserDetailsService{
                         .roles(role).build();
 
         return userDetails;
+    }
+
+    @Override
+    public List<UsersDTO> findAll() {
+
+        List<Users> usersList = usersRepository.findAll();
+
+        List<UsersDTO> usersDTOList = new ArrayList<>();
+
+        for (Users users : usersList){
+            UsersDTO usersDTO = modelMapper.map(users, UsersDTO.class);
+            usersDTOList.add(usersDTO);
+        }
+
+        return usersDTOList;
+    }
+
+    @Override
+    public UsersDTO read(Long id) {
+        log.info("서비스로 들어온 값 : " + id);
+
+        Optional<Users> optionalUsers = usersRepository.findById(id);
+        Users users = optionalUsers.orElseThrow();
+        return modelMapper.map(users, UsersDTO.class);
     }
 }
