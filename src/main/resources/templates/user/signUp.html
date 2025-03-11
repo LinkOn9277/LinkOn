@@ -31,9 +31,7 @@
 <body>
   <div th:block layout:fragment="content" style="padding: 2% 5%">
 
-
-    <form action="/user/signUp" method="post" onsubmit="aa()">
-
+    <form action="/user/signUp" method="post">
       <!-- 이름 -->
       <div class="form-group">
         <label>이름 :</label>
@@ -44,13 +42,14 @@
       <div class="form-group">
         <label>이메일 :</label>
         <div class="email-group">
-          <input type="text" class="form-control a" name="a"  placeholder="아이디" required>
+          <input type="text" class="form-control firstemail" id="firstemail" name="firstemail"  placeholder="아이디" required onchange="fullemail()">
           <span>@</span>
-          <select class="form-select b" name="b">
+          <select class="form-select lastemail" id="lastemail" name="lastemail" onchange="fullemail()">
             <option value="naver.com">naver.com</option>
             <option value="gmail.com">gmail.com</option>
             <option value="daum.net">daum.net</option>
           </select>
+          <input id="email" name="email" type="hidden" onchange="fullemail()">
         </div>
       </div>
 
@@ -69,30 +68,29 @@
             <option value="011">011</option>
             <option value="016">016</option>
           </select>
-          <input type="text" class="form-control" id="phoneOne" name="phoneOne" maxlength="4" required oninput="combinePhoneNumber()">
-          <input type="text" class="form-control" id="phoneTwo" name="phoneTwo" maxlength="4" required oninput="combinePhoneNumber()">
-          <input hidden type="text" id="phone" name="phone">
+          <input type="text" class="form-control" id="phoneOne" name="phoneOne" maxlength="4" required oninput="fullPhoneNumber()">
+          <input type="text" class="form-control" id="phoneTwo" name="phoneTwo" maxlength="4" required oninput="fullPhoneNumber()">
+          <input type="hidden" id="phone" name="phone">
         </div>
       </div>
 
+      <!-- 주민번호 -->
       <div class="form-group">
         <label>주민등록번호 :</label>
         <div class="id-group">
           <input type="text" class="form-control" id="residentFirst" name="residentFirst" maxlength="6" placeholder="앞 6자리" required oninput="combineResidentNumber()">
           <span>-</span>
           <input type="password" class="form-control" id="residentLast" name="residentLast" maxlength="7" placeholder="뒤 7자리" required oninput="combineResidentNumber()">
-          <input hidden type="text" id="resident" name="resident">
+          <input  type="hidden" id="resident" name="resident">
         </div>
       </div>
 
       <!-- 주소 -->
       <div class="form-group">
         <label>주소 :</label>
-        <div class="d-flex">
-          <input type="text" class="form-control" name="addr" placeholder="우편번호" required>
-          <button type="button" class="btn btn-secondary ms-2">우편번호 찾기</button>
-        </div>
-        <input type="text" class="form-control mt-2" name="addr" placeholder="도로명, 시/구/동">
+        <input type="text" id="sample5_address" name="addr" placeholder="주소">
+        <input type="button" onclick="sample5_execDaumPostcode()" value="주소 검색"><br>
+        <div id="map" style="width:300px;height:300px;margin-top:10px;display:none"></div>
       </div>
 
       <!-- 버튼 -->
@@ -101,7 +99,6 @@
         <button type="submit" class="btn btn-primary">가입하기</button>
       </div>
 
-
     </form>
 
 
@@ -109,21 +106,33 @@
   </div>
 
   <th:block layout:fragment="script">
+    <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
     <script>
 
-      function aa() {
+      function sample5_execDaumPostcode() {
+        new daum.Postcode({
+          oncomplete: function(data) {
+            var addr = data.address; // 최종 주소 변수
 
-        let email1 = $(".a").val()
-        let email2 = $(".b").val()
+            // 주소 정보를 해당 필드에 넣는다.
+            document.getElementById("sample5_address").value = addr;
+            // 주소로 상세 정보를 검색
+          }
+        }).open();
+      } // 주소입력
 
-        let str = `<input name="email" type="hidden" value="${email1+'@'+email2}">`
-        $("form").append(str)
+      function fullemail() {
+        const firstemail = document.querySelector('.firstemail').value;
+        const lastemail = document.querySelector('.lastemail').value;
 
-        return true;
+        // 숨은 필드에 이메일 값 업데이트
+        const emailInput = document.getElementById("email");
+        if (emailInput) {
+          emailInput.value = `${firstemail}@${lastemail}`;
+        }
+      } // email 합치기
 
-      }
-
-      function combinePhoneNumber() {
+      function fullPhoneNumber() {
         const prefix = document.getElementById('phonePrefix').value;
         const phoneOne = document.getElementById('phoneOne').value;
         const phoneTwo = document.getElementById('phoneTwo').value;
@@ -132,8 +141,7 @@
         const fullPhoneNumber = `${prefix}-${phoneOne}-${phoneTwo}`;
         document.getElementById('phone').value = fullPhoneNumber;
 
-        console.log('Complete Phone Number:', fullPhoneNumber); // 디버깅용 출력
-      }
+      } // Phone 합치기
 
       function combineResidentNumber() {
         const firstPart = document.getElementById('residentFirst').value;
@@ -143,8 +151,8 @@
         const fullResidentNumber = `${firstPart}-${lastPart}`;
         document.getElementById('resident').value = fullResidentNumber;
 
-        console.log('Complete Resident Number:', fullResidentNumber); // 디버깅용 출력
-      }
+      } // 주민번호 합치기
+
 
 
     </script>
